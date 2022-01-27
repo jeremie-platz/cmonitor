@@ -1,0 +1,19 @@
+Multicall provider
+
+Create multicall batch caller
+
+1. Create multicall batcher interface
+2. setup refresh interval
+3. create array of calls then call Promise.all() if interval time ended
+    Example:
+        push contract call 1 into call pool
+        push contract call 2 into call pool
+        when timer reaches 0, execute Promise.call()
+        Each contract call should have a callback to handle result
+
+How to handle all calls
+    - Ask sharad what info do we need for each type of """util"""
+        pools, ctokens, oracles, etc
+    - Create a controller which only handles calls related to its own controller
+
+    
