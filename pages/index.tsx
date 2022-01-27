@@ -19,7 +19,9 @@ const ORACLE_IDENTIFIER_TARGETS = [
 export default function Home() {
 
   const fuseInterface = buildFuseInterface()
-  const [poolsData, setPoolsData] = useState({})
+  const [poolsData, setPoolsData] = useState({
+    pools: [] //TODO just input array so typescript doesn't complain
+  })
   const [oracleData, setOracleData] = useState({})
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!poolsData?.pools) {
+    if (poolsData.pools.length === 0) { //TODO that ts fix
       return
     }
     console.log('Fetching oracle data')
@@ -63,7 +65,7 @@ export default function Home() {
           target: hasOracleTarget
         }
       }
-    })).then(data => {
+    })).then((data: any) => {
       data = data.reduce((result, element) => {
         return { ...result, ...element }
       })
