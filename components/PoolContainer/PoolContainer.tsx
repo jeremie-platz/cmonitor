@@ -32,7 +32,7 @@ const PoolContainer = ({
     const buildAssets = (input) => {
         return Object.entries(input).map((asset:[string, any]) => {
             let [address, data] = asset
-            return <AssetContainer symbol={data.symbol} address={address} target={data.target} v3pool={data.v3PoolAddress}/>
+            return <AssetContainer key={address} symbol={data.symbol} address={address} target={data.target} v3pool={data.v3PoolAddress}/>
           })
     }
 
