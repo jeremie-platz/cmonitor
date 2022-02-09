@@ -1,5 +1,7 @@
 import { Contract, constants } from "ethers";
 import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { MulticallProvider } from '@0xsequence/multicall/providers'
+
 import { FuseAddresses } from "./addresses/index";
 import { ChainID } from "../utils/networks";
 declare type MinifiedContracts = {
@@ -9,7 +11,7 @@ declare type MinifiedContracts = {
     };
 };
 export default class Fuse {
-    provider: JsonRpcProvider;
+    provider: JsonRpcProvider | MulticallProvider;
     constants: typeof constants;
     contracts: {
         [key: string]: Contract;
@@ -36,6 +38,6 @@ export default class Fuse {
     addresses: FuseAddresses;
     static COMPTROLLER_ERROR_CODES: string[];
     static CTOKEN_ERROR_CODES: string[];
-    constructor(web3Provider: JsonRpcProvider | Web3Provider, chainId: ChainID);
+    constructor(web3Provider: JsonRpcProvider | Web3Provider | MulticallProvider, chainId: ChainID);
 }
 export {};

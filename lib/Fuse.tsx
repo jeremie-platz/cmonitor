@@ -1,4 +1,5 @@
 import { providers, Contract } from "ethers";
+import { providers as MulticallProviders } from '@0xsequence/multicall'
 import Fuse from '../esm/Fuse/index'
 
 const MAINNET_RPC = 'https://eth-mainnet.alchemyapi.io/v2/2Mt-6brbJvTA4w9cpiDtnbTo6qOoySnN'
@@ -8,8 +9,12 @@ const buildProvider = () => {
     return new providers.JsonRpcProvider(MAINNET_RPC)
 }
 
+const buildMulticallProvider = () => {
+    return new MulticallProviders.MulticallProvider(buildProvider())
+}
+
 export const buildFuseInterface = () => {
-    let provider = buildProvider()
+    let provider = buildMulticallProvider()
     return new Fuse(provider, MAINNET_CHAINID)
 }
 
