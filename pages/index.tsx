@@ -75,7 +75,7 @@ export default function Home() {
             let priceOracleIdentifier = await fuseInterface.identifyPriceOracle(assetPriceOracleAddress)
             let oracleIsTarget = ORACLE_IDENTIFIER_TARGETS.includes(priceOracleIdentifier)
             let v3PoolAddress = null
-            let hasFullLiquidity = null
+            let hasFullRangeLiquidity = null
             if(oracleIsTarget){
               if(priceOracleIdentifier.includes('UniswapV3TwapPriceOracleV2')){
                 let oracleContract = buildOracleV2Contract(assetPriceOracleAddress, fuseInterface)
@@ -88,7 +88,7 @@ export default function Home() {
               }
               if(v3PoolAddress){
                 const v3PoolContract = buildV3PoolContract(v3PoolAddress, fuseInterface)
-                hasFullLiquidity = await poolHasFullRangeLiquidity(v3PoolContract)
+                hasFullRangeLiquidity = await poolHasFullRangeLiquidity(v3PoolContract)
               }
               hasOracleTarget = true
           }
@@ -99,7 +99,7 @@ export default function Home() {
                 oracleIdentifier: priceOracleIdentifier,
                 target: oracleIsTarget,
                 v3PoolAddress: v3PoolAddress,
-                hasFullLiquidity: hasFullLiquidity
+                hasFullRangeLiquidity: hasFullRangeLiquidity
               }
             }
           }))).reduce((result, element) => {
