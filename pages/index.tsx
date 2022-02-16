@@ -6,7 +6,7 @@ import { getTotalPoolCount, getAllPoolsData } from '../lib/Graph.tsx';
 // @ts-ignore
 import { buildFuseInterface, buildPoolOracleContract } from '../lib/Fuse.tsx';
 // @ts-ignore
-import { buildOracleContract, buildOracleV2Contract, buildFactoryContract } from '../lib/UniswapV3'
+import { buildOracleContract, buildOracleV2Contract, buildFactoryContract, buildV3PoolContract, poolHasFullRangeLiquidity } from '../lib/UniswapV3'
 
 
 import Pool from '../components/PoolContainer/PoolContainer'
@@ -75,6 +75,7 @@ export default function Home() {
             let priceOracleIdentifier = await fuseInterface.identifyPriceOracle(assetPriceOracleAddress)
             let oracleIsTarget = ORACLE_IDENTIFIER_TARGETS.includes(priceOracleIdentifier)
             let v3PoolAddress = null
+            let hasFullLiquidity = null
             if(oracleIsTarget){
               if(priceOracleIdentifier.includes('UniswapV3TwapPriceOracleV2')){
                 let oracleContract = buildOracleV2Contract(assetPriceOracleAddress, fuseInterface)
@@ -85,6 +86,10 @@ export default function Home() {
                 let feeTier = await oracleContract.feeTier()
                 v3PoolAddress = await UniswapV3FactoryContract.getPool(address, WETH_ADDR, feeTier)
               }
+              if(v3PoolAddress){
+                const v3PoolContract = buildV3PoolContract(v3PoolAddress, fuseInterface)
+                hasFullLiquidity = await poolHasFullRangeLiquidity(v3PoolContract)
+              }
               hasOracleTarget = true
           }
             return {
@@ -93,7 +98,8 @@ export default function Home() {
                 liquidity: liquidity,
                 oracleIdentifier: priceOracleIdentifier,
                 target: oracleIsTarget,
-                v3PoolAddress: v3PoolAddress
+                v3PoolAddress: v3PoolAddress,
+                hasFullLiquidity: hasFullLiquidity
               }
             }
           }))).reduce((result, element) => {
@@ -111,7 +117,6 @@ export default function Home() {
   }, [poolsData])
 
   const buildPoolObjects = (input) => {
-    console.log(input)
     return Object.entries(input).map((pool:[string, any]) => {
       let [address, data] = pool
       if(targetFilter && !data.target ){

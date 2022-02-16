@@ -5,12 +5,18 @@ const AssetContainer = ({
     symbol,
     address,
     v3pool,
-    target
+    target,
+    hasFullLiquidity
 }) => {
     return (
     <div className={styles.asset}>
         <span className={target ? styles.target : null}>{symbol}</span> 
-        {v3pool ? <a className={styles.v3pool} href={'https://info.uniswap.org/#/pools/' + v3pool.toLowerCase()}>{v3pool}</a> : null}
+        {v3pool ? 
+        <>
+        <a className={styles.v3pool} href={'https://info.uniswap.org/#/pools/' + v3pool.toLowerCase()}>{v3pool}</a>
+        <span> {hasFullLiquidity ? 'OK' : 'NOT Full liquidity'}</span>
+        </> 
+        : null}
     </div>
     )
 }
@@ -32,7 +38,7 @@ const PoolContainer = ({
     const buildAssets = (input) => {
         return Object.entries(input).map((asset:[string, any]) => {
             let [address, data] = asset
-            return <AssetContainer key={address} symbol={data.symbol} address={address} target={data.target} v3pool={data.v3PoolAddress}/>
+            return <AssetContainer key={address} symbol={data.symbol} address={address} target={data.target} v3pool={data.v3PoolAddress} hasFullLiquidity={data.hasFullLiquidity}/>
           })
     }
 

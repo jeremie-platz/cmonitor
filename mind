@@ -1,0 +1,8 @@
+MAXTICK = 887272
+
+get tickSpacing from contract
+
+do x = Math.floor(MAXTICK/tickSpacing) * tickSpacing
+check liquidity on tick x and tick -x
+
+compare with https://www.metacrypt.org/tools/uniswap-v3-calculator-simulator/?network=ethereum&token0=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&token1=0x1f9840a85d5af5bf1d1762f925bdaddc4201f984&feeTier=3000
